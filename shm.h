@@ -3,5 +3,7 @@
 
 int print(char* argv);
 
+int example();
+
 #endif /*__SHM_H__*/
 
