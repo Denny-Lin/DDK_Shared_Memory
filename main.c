@@ -13,7 +13,9 @@ int main(int argc, char* argv[]){
     
     example();
     
-    example2();
+    example2_write();
+    
+    //example2_read();
     
     return 0;
 }
