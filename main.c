@@ -13,5 +13,7 @@ int main(int argc, char* argv[]){
     
     example();
     
+    example2();
+    
     return 0;
 }

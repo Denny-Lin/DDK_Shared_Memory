@@ -4,8 +4,11 @@
 //test
 int print(char* argv);
 
-//mmap()
+//anonymous mapping
 int example();
+
+//file mapping
+int example2();
 
 #endif /*__SHM_H__*/
 

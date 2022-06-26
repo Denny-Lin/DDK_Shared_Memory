@@ -5,8 +5,8 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 
-static int SUCCESS = 0;
-static int ERROR = -1;
+#define SUCCESS 0
+#define ERROR -1
 
 int print(char* argv){
     printf("hello %s\n", argv);
@@ -51,3 +51,12 @@ int example(){
     
     return SUCCESS;
 }
+
+int example2(){
+
+    return SUCCESS;
+}
+
+
+
+
