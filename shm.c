@@ -10,10 +10,45 @@
 #define SUCCESS 0
 #define ERROR -1
 
-int print(char* argv){
-    printf("hello %s\n", argv);
+int print(char* argv[]){
+    printf("hello %s\n", argv[1]);
     
     return 0;
+}
+
+int memory_test(){
+    char* test1 = (char*)calloc(100000000, sizeof(char));//100MB
+    
+    getchar();
+    
+    char* test2 = (char*)malloc(100000000 * sizeof(char));//100MB
+    memset(test2, 0, 100000000);
+    
+    return SUCCESS;
+}
+
+int parser(char* argv[]){
+    if(argv[1]==NULL) return ERROR;
+      
+    switch(argv[1][0]){
+        case 't':
+            print(argv);
+            break;
+        case 'e':
+            example();
+            break;    
+        case 'w':
+            example2_write();
+            break;
+        case 'r':
+            example2_read();
+            break;    
+        default: 
+            printf("Do not have %c\n", argv[1][0]);
+            break;    
+    }
+    
+    return SUCCESS;
 }
 
 int example(){
@@ -59,8 +94,8 @@ int example(){
 int example2_write(){
     int fd;
     int PAGESIZE = 4096;
-    char* shared_memory;
-    char* buf = "Hello World!";
+    char* shared_memory;   
+    static char* buf= "Hello World!";
     
     fd = open("example2",O_RDWR | O_CREAT, 0777);
     
@@ -75,17 +110,21 @@ int example2_write(){
     if(shared_memory == MAP_FAILED){  
         printf("mmap() fail.\n");    
         return ERROR;
-    }   
+    } 
     
     close(fd);
-    
+     
     //Write something
-    memcpy(shared_memory, buf, strlen(buf));
-    printf("%s\n", shared_memory);
-      
-    getchar();//puase
+    int count = 10;
+    do{      
+        memcpy(shared_memory, buf+count, strlen(buf));
+        printf("%s\n", shared_memory);
+        sleep(1);
+    }while(count--);
+     
+    unlink("example2");   
     
-    unlink("example2");
+    munmap(shared_memory, PAGESIZE);
            
     return SUCCESS;
 }
@@ -110,9 +149,17 @@ int example2_read(){
     } 
       
     close(fd);   
-    
+        
     //Read something 
-    printf("%s\n", shared_memory);
+    int count = 20;
+    do{          
+        printf("%s\n", shared_memory);
+        sleep(1);
+    }while(count--);
+    
+    unlink("example2");
+    
+    munmap(shared_memory, PAGESIZE);
 
     return SUCCESS;
 }
