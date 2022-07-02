@@ -15,7 +15,7 @@ int parser(char* argv[]);
 //file mapping (read and write)
 int example2(char rw);
 
-//Parent calls child to unzip files.
+//Parent calls child to unzip files and child sends the progress.
 int unzip();
 
 #endif /*__SHM_H__*/

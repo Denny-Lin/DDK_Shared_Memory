@@ -42,7 +42,7 @@ int parser(char* argv[]){
         case '2':
             if(argv[2]==NULL || argv[2][0]!='-') return ERROR;
             
-            argv[2][1]=='w'? example2('w'): example2('r');
+            argv[2][1]=='w'?example2('w'):argv[2][1]=='r'?example2('r'):NULL;
             
             break; 
               
