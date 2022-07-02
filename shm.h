@@ -11,11 +11,11 @@ int memory_used();
 //anonymous mapping
 int example();
 
-
 //"./out -2 -w hello" and then use another shell to "./out -2 -r read"
 //"./out -2 -w 1" and then use another shell to "./out -2 -w 2"
-//We open a file and map this file in the virtual memory of ./out, and then request a 4k page cache in physical memory. 
-//So, we can read the contents written by another bin, since they used the same physical memory in the user space.
+//We open a file and map this file in the virtual memory of ./out
+//,and then request a 4k page cache in physical memory when we are doing memcpy() that gets page fault. 
+//So, we can read the contents written by another bin, since they use the same physical memory in the user space.
 //Finally, the opened file will be closed, but deleted by the later ./out until it finishes.
 //file mapping
 int example2(char rw, char* contents);
