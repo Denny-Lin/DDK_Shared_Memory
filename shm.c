@@ -25,7 +25,9 @@ int parser(char* argv[]){
         case '2':
             if(argv[2]==NULL || argv[2][0]!='-') return ERROR;
             
-            argv[2][1]=='w'?example2('w'):argv[2][1]=='r'?example2('r'):NULL;
+            if(argv[3]==NULL) return ERROR;
+            
+            argv[2][1]=='w'?example2('w', argv[3]):argv[2][1]=='r'?example2('r',"read"):NULL;
             
             break; 
               
@@ -91,7 +93,7 @@ int example(){
     return SUCCESS;
 }
 
-int example2(char rw){
+int example2(char rw, char* contents){
     int fd;
     int PAGESIZE = 4096;
     char* shared_memory;
@@ -117,10 +119,11 @@ int example2(char rw){
      
     int count = 10;
     do{       
-        (rw=='w')?memcpy(shared_memory, buf+count, strlen(buf)):NULL; 
-              
-        printf("%s\n", shared_memory);
-        sleep(1);
+        (rw=='w')?memcpy(shared_memory, contents, strlen(contents)):NULL; 
+        
+        sleep(1);  
+            
+        printf("%s\n", shared_memory);     
     }while(count--);
  
     unlink("example2");
