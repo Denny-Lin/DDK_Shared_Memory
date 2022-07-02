@@ -28,21 +28,24 @@ int memory_test(){
 }
 
 int parser(char* argv[]){
-    if(argv[1]==NULL) return ERROR;
+    if(argv[1]==NULL || argv[1][0]!='-') return ERROR;
       
-    switch(argv[1][0]){
+    switch(argv[1][1]){
         case 't':
             print(argv);
             break;
-        case 'e':
+            
+        case '1':
             example();
-            break;    
-        case 'w':
-            example2_write();
-            break;
-        case 'r':
-            example2_read();
-            break;    
+            break;  
+              
+        case '2':
+            if(argv[2]==NULL || argv[2][0]!='-') return ERROR;
+            
+            argv[2][1]=='w'? example2('w'): example2('r');
+            
+            break; 
+              
         default: 
             printf("Do not have %c\n", argv[1][0]);
             break;    
@@ -91,57 +94,22 @@ int example(){
     return SUCCESS;
 }
 
-int example2_write(){
-    int fd;
-    int PAGESIZE = 4096;
-    char* shared_memory;   
-    static char* buf= "Hello World!";
-    
-    fd = open("example2",O_RDWR | O_CREAT, 0777);
-    
-    if(fd<0){
-        printf("Can't open the file.\n");
-        return ERROR;
-    }
-    
-    ftruncate(fd, PAGESIZE);
-    shared_memory = mmap(NULL, PAGESIZE, PROT_WRITE, MAP_SHARED, fd, 0);
-    
-    if(shared_memory == MAP_FAILED){  
-        printf("mmap() fail.\n");    
-        return ERROR;
-    } 
-    
-    close(fd);
-     
-    //Write something
-    int count = 10;
-    do{      
-        memcpy(shared_memory, buf+count, strlen(buf));
-        printf("%s\n", shared_memory);
-        sleep(1);
-    }while(count--);
-     
-    unlink("example2");   
-    
-    munmap(shared_memory, PAGESIZE);
-           
-    return SUCCESS;
-}
-
-int example2_read(){
+int example2(char rw){
     int fd;
     int PAGESIZE = 4096;
     char* shared_memory;
-    
-    fd = open("example2",O_RDONLY);
-    
+    static char* buf= "Hello World!";
+
+    fd = open("example2", (rw=='w')?O_RDWR|O_CREAT:O_RDWR, 0777);
+
     if(fd<0){
         printf("Can't open the file.\n");
         return ERROR;
     }
     
-    shared_memory = mmap(NULL, PAGESIZE, PROT_READ, MAP_SHARED, fd, 0);
+    ftruncate(fd, PAGESIZE);//       
+   
+    shared_memory = mmap(NULL, PAGESIZE, (rw=='w')?PROT_WRITE:PROT_READ, MAP_SHARED, fd, 0);
     
     if(shared_memory == MAP_FAILED){      
         printf("mmap() fail.\n");
@@ -149,20 +117,19 @@ int example2_read(){
     } 
       
     close(fd);   
-        
-    //Read something 
-    int count = 20;
-    do{          
+     
+    int count = 10;
+    do{       
+        (rw=='w')?memcpy(shared_memory, buf+count, strlen(buf)):NULL; 
+              
         printf("%s\n", shared_memory);
         sleep(1);
     }while(count--);
-    
+ 
     unlink("example2");
     
     munmap(shared_memory, PAGESIZE);
 
     return SUCCESS;
 }
-
-
 
