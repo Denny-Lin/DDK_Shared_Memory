@@ -10,29 +10,12 @@
 #define SUCCESS 0
 #define ERROR -1
 
-int print(char* argv[]){
-    printf("hello %s\n", argv[1]);
-    
-    return 0;
-}
-
-int memory_test(){
-    char* test1 = (char*)calloc(100000000, sizeof(char));//100MB
-    
-    getchar();
-    
-    char* test2 = (char*)malloc(100000000 * sizeof(char));//100MB
-    memset(test2, 0, 100000000);
-    
-    return SUCCESS;
-}
-
 int parser(char* argv[]){
     if(argv[1]==NULL || argv[1][0]!='-') return ERROR;
       
     switch(argv[1][1]){
-        case 't':
-            print(argv);
+        case 'm':
+            memory_used();
             break;
             
         case '1':
@@ -50,6 +33,20 @@ int parser(char* argv[]){
             printf("Do not have %c\n", argv[1][0]);
             break;    
     }
+    
+    return SUCCESS;
+}
+
+int memory_used(){
+    char* test = (char*)malloc(100000000 * sizeof(char));//100MB
+    
+    system("free -m");
+    printf("\n");
+    
+    memset(test, 0, 100000000);
+    
+    //used +100
+    system("free -m");
     
     return SUCCESS;
 }
@@ -132,4 +129,5 @@ int example2(char rw){
 
     return SUCCESS;
 }
+
 
