@@ -19,12 +19,16 @@ Introduction of shared memory
 ```
 
 ```sh
+#bash1
 ./out -2 -w hello
+#bash2
 ./out -2 -r read
 ```
 
 ```sh
+#bash1
 ./out -2 -w 1
+#bash2
 ./out -2 -w 2
 ```
 
