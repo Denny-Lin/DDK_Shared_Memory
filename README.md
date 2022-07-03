@@ -28,10 +28,6 @@ Introduction of shared memory
 ./out -2 -w 2
 ```
 
-```sh
-./out -2 -w hello
-```
-
 # References
 1. https://man7.org/linux/man-pages/man2/mmap.2.html
 2. https://en.wikipedia.org/wiki/Memory-mapped_file
